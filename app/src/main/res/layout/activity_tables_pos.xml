@@ -15,25 +15,9 @@
         android:layout_height="wrap_content"
         android:columnCount="1"
         android:rowCount="2"
-
         >
 
-        <Spinner
-            android:id="@+id/cmbkat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
 
-            android:layout_columnWeight="1"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:textAlignment="center"
-            android:padding="2dp"
-            android:spinnerMode="dialog"
-            android:visibility="visible"
-            style="@style/arizagirisspinner"
-            android:layout_marginBottom="5dp"
-
-            />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -42,11 +26,10 @@
             android:layout_columnWeight="1"
             >
             <EditText
-                android:id="@+id/txtodano"
+                android:id="@+id/txtCreateTable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-
                 android:hint="Yeni Masa Adı"
                 android:layout_gravity="fill_horizontal"
                 android:textSize="25dp"
@@ -57,10 +40,11 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="10dp"
 
+
                 />
 
             <Button
-                android:id="@+id/btnara"
+                android:id="@+id/btnCreate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -83,155 +67,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@color/white"
+        android:contentDescription="@string/appbar_scrolling_view_behavior"
         android:layout_marginBottom="100dp">
         <GridLayout
-            android:id="@+id/gridroomrack"
+            android:id="@+id/gridTables"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:columnCount="3"
+            android:columnCount="4"
             >
-
-            <LinearLayout
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:orientation="vertical"
-                android:layout_margin="5dp"
-                android:background="@drawable/full_table"
-                android:layout_columnWeight="1"
-                >
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="1dp"
-                    android:orientation="vertical"
-                    >
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="100dp"
-                        android:text="201"
-                       android:layout_gravity="center"
-                        android:src="@drawable/full"
-                        ></ImageView>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="101"
-                        android:textAlignment="center"
-                        android:textSize="25dp"
-                        ></TextView>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Abdullah"
-                        android:textAlignment="center"
-                        android:textSize="25dp"
-                        ></TextView>
-                </LinearLayout>
-
-
-
-            </LinearLayout>
-
-            <LinearLayout
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:orientation="vertical"
-                android:layout_margin="5dp"
-                android:background="@drawable/empty_table"
-                android:layout_columnWeight="1"
-                >
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="1dp"
-                    android:orientation="vertical"
-                    >
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="100dp"
-                        android:text="201"
-                        android:layout_gravity="center"
-                        android:src="@drawable/empty"
-                        ></ImageView>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="102"
-                        android:textAlignment="center"
-                        android:textSize="25dp"
-                        ></TextView>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textAlignment="center"
-                        android:textSize="25dp"
-                        ></TextView>
-                </LinearLayout>
-
-
-
-            </LinearLayout>
-
-            <LinearLayout
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:orientation="vertical"
-                android:layout_margin="5dp"
-                android:background="@drawable/full_table"
-                android:layout_columnWeight="1"
-                >
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="1dp"
-                    android:orientation="vertical"
-                    >
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="100dp"
-                        android:text="201"
-                        android:layout_gravity="center"
-                        android:src="@drawable/full"
-                        ></ImageView>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="101"
-                        android:textAlignment="center"
-                        android:textSize="25dp"
-                        ></TextView>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Abdullah"
-                        android:textAlignment="center"
-                        android:textSize="25dp"
-                        ></TextView>
-                </LinearLayout>
-
-
-
-            </LinearLayout>
-
-
-
-
-
-
-
         </GridLayout>
     </ScrollView>
 

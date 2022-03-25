@@ -5,6 +5,7 @@ import androidx.cardview.widget.CardView;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
@@ -50,6 +51,7 @@ public class SelectDepartment extends AppCompatActivity {
         _tools =new ToolProgressBar(SelectDepartment.this);
         _createRequestModel = new CreateRequestModel();
         gridDepartment.removeAllViews();
+
         getDepartment();
     }
 
@@ -171,6 +173,9 @@ public class SelectDepartment extends AppCompatActivity {
 
         public void onClick(View v) {
             final CardView cardView = findViewById(v.getId());
+            Intent tables = new Intent(SelectDepartment.this,TablesPos.class);
+            tables.putExtra("DeptCode",cardView.getTransitionName());
+            startActivity(tables);
             _tools.showToast("Seçili Departman Kodu : "+cardView.getTransitionName());
         }
     }

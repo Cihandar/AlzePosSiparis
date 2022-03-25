@@ -25,4 +25,7 @@ public class Masalar {
     public double tOPLAM;
     @JsonProperty("GARSON_ADI")
     public String gARSON_ADI;
+    @JsonProperty("GRUP")
+    public String gRUP;
+
 }
