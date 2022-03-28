@@ -1,9 +1,11 @@
 package com.example.alzepossiparis;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -25,6 +27,7 @@ import com.example.alzepossiparis.models.Depart;
 import com.example.alzepossiparis.models.Masalar;
 import com.example.alzepossiparis.models.RequestModel;
 import com.example.alzepossiparis.models.VolleyCallback;
+import com.example.alzepossiparis.sqliteModels.Groups;
 import com.example.alzepossiparis.tools.CreateRequestModel;
 import com.example.alzepossiparis.tools.ToolProgressBar;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -35,6 +38,7 @@ import java.util.List;
 public class TablesPos extends AppCompatActivity {
 
     GridLayout gridTables;
+    LinearLayout gridGroups;
     Spinner spPlace;
     EditText txtCreateTable;
     Button btnCreate;
@@ -50,6 +54,7 @@ public class TablesPos extends AppCompatActivity {
     void init()
     {
         gridTables = findViewById(R.id.gridTables);
+        gridGroups = findViewById(R.id.gridGroups);
         //  spPlace = findViewById(R.id.spPlace);
         txtCreateTable = findViewById(R.id.txtCreateTable);
         btnCreate = findViewById(R.id.btnCreate);
@@ -60,7 +65,15 @@ public class TablesPos extends AppCompatActivity {
         _tools =new ToolProgressBar(TablesPos.this);
         _createRequestModel = new CreateRequestModel();
         ext =  getIntent().getExtras();
-        getTables();
+        try {
+            getGroups();
+        }catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+
+        getTables("Hepsi");
+
     }
 
     @Override
@@ -70,13 +83,50 @@ public class TablesPos extends AppCompatActivity {
         init();
     }
 
-    void getTables()
+    void getGroups()
+    {
+        gridGroups.removeAllViews();
+        Button btn = new Button(this);
+        LinearLayout.LayoutParams gridLytprms = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,_tools.setDpInt(50));
+        btn.setText("Hepsi");
+        btn.setLayoutParams(gridLytprms);
+        btn.setId(90000+1);
+        btn.setAllCaps(false);
+        btn.setOnClickListener( new ClickHandlerGroups());
+        gridGroups.addView(btn);
+        int i=0;
+        for(Groups grp : Groups.listAll(Groups.class))
+        {
+            i++;
+
+            btn = new Button(this);
+            btn.setText(grp.getGroupName());
+            btn.setLayoutParams(gridLytprms);
+            btn.setId(90001+i);
+            btn.setOnClickListener( new ClickHandlerGroups());
+            gridGroups.addView(btn);
+
+        }
+    }
+
+    public class ClickHandlerGroups implements View.OnClickListener {
+
+        public void onClick(View v) {
+            final Button btn = findViewById(v.getId());
+            getTables(btn.getText().toString());
+
+        }
+    }
+
+    void getTables(String groupName)
     {
         progressDialog = _tools.showProgress("Lütfen Bekleyin", "Masalar Getiriliyor..", R.style.AppTheme_Dark_Dialog);
         progressDialog.show();
         String deptCode=ext.getString("DeptCode");
-        String Query= "SELECT * FROM (SELECT ISNULL(A.MASANO,M.MASANO) AS MASANO,M.ACIKLAMA,ASAATI,XPOS,YPOS,KISIS, CASE WHEN ISNULL(A.SEZLONG,0)=1 THEN 9 ELSE ISNULL(STATU,CASE WHEN (SELECT COUNT(*) FROM ADSSATIR AS S WHERE S.FISCOUNTER=A.FISCOUNTER AND ISNULL(S.YAZ,0)=0)=0 AND A.YAZCOUNT>0 THEN 2 ELSE 1 END) END AS STATU, KISI AS ADISYONKISI,ANO,TOPLAM,GARSON_KODU AS GARSON_ADI ,GRUP FROM (SELECT FISCOUNTER,ASAATI,MASANO,KISI,YAZCOUNT,ROUND(TOPLAM,2) AS TOPLAM,GARSON.GADI AS GARSON_KODU, ADISYONNO+' '+GARSONKODU AS ANO,SEZLONG FROM ADISYON  WITH (NOLOCK)  LEFT JOIN GARSON ON GARSON.GKODU = ADISYON.GARSONKODU WHERE ADISYON.DEPKODU='"+deptCode+"' AND MASANO NOT LIKE 'Z%') A FULL OUTER JOIN (SELECT MASANO,KISIS,XPOS,YPOS,STATU,ACIKLAMA,GRUP  FROM MASALAR  WITH (NOLOCK) WHERE DEPART='"+deptCode+"') M ON A.MASANO=M.MASANO) TBL  ORDER BY MASANO";
-        System.out.println(Query);
+        String where ="";
+        if(groupName!="Hepsi") where = " WHERE GRUP='"+groupName+"' ";
+        String Query= "SELECT * FROM (SELECT ISNULL(A.MASANO,M.MASANO) AS MASANO,M.ACIKLAMA,ASAATI,XPOS,YPOS,KISIS, CASE WHEN ISNULL(A.SEZLONG,0)=1 THEN 9 ELSE ISNULL(STATU,CASE WHEN (SELECT COUNT(*) FROM ADSSATIR AS S WHERE S.FISCOUNTER=A.FISCOUNTER AND ISNULL(S.YAZ,0)=0)=0 AND A.YAZCOUNT>0 THEN 2 ELSE 1 END) END AS STATU, KISI AS ADISYONKISI,ANO,TOPLAM,GARSON_KODU AS GARSON_ADI ,GRUP FROM (SELECT FISCOUNTER,ASAATI,MASANO,KISI,YAZCOUNT,ROUND(TOPLAM,2) AS TOPLAM,GARSON.GADI AS GARSON_KODU, ADISYONNO+' '+GARSONKODU AS ANO,SEZLONG FROM ADISYON  WITH (NOLOCK)  LEFT JOIN GARSON ON GARSON.GKODU = ADISYON.GARSONKODU WHERE ADISYON.DEPKODU='"+deptCode+"' AND MASANO NOT LIKE 'Z%') A FULL OUTER JOIN (SELECT MASANO,KISIS,XPOS,YPOS,STATU,ACIKLAMA,GRUP  FROM MASALAR  WITH (NOLOCK) WHERE DEPART='"+deptCode+"') M ON A.MASANO=M.MASANO) TBL "+where+"  ORDER BY MASANO";
+       // System.out.println(Query);
         RequestModel requestModel = _createRequestModel.Create(Query);
         if(requestModel!=null)
         {

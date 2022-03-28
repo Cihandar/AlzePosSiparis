@@ -175,6 +175,21 @@
         android:id="@+id/btnApiTest"
         />
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnGetConstants"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/round_back_secondary_15"
+        android:text="Sabitleri Çek"
+        android:textAllCaps="false"
+        android:textColor="#fff"
+        android:textSize="20dp"
+
+        />
+
 
 
 

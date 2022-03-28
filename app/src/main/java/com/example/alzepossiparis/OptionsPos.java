@@ -6,6 +6,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.RestrictionEntry;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.EditText;
@@ -20,6 +21,8 @@ import com.android.volley.toolbox.Volley;
 import com.example.alzepossiparis.applications.ApiSettingCrud;
 import com.example.alzepossiparis.models.ApiResult;
 import com.example.alzepossiparis.sqliteModels.ApiSetting;
+import com.example.alzepossiparis.sqliteModels.Groups;
+import com.example.alzepossiparis.tools.ConstantsPos;
 import com.example.alzepossiparis.tools.ToolProgressBar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,13 +38,14 @@ public class OptionsPos extends AppCompatActivity {
     EditText txtApiUrl;
     EditText txtApiUsername;
     EditText txtApiPassword;
-    AppCompatButton btnTest,btnSave;
+    AppCompatButton btnTest,btnSave,btnGetConstants;
     RequestQueue mQueue;
     Context context =this;
     ProgressDialog progressDialog;
     ToolProgressBar toolProgressBar;
     ObjectMapper mapper;
     ApiSettingCrud _apiSettingCrud;
+    ConstantsPos _constantsPos;
     void init()
     {
         txtApiUrl = findViewById(R.id.txtApiUrl);
@@ -54,10 +58,15 @@ public class OptionsPos extends AppCompatActivity {
         btnSave = findViewById(R.id.btnApiSave);
         btnSave.setOnClickListener(view -> {saveApi();});
 
+        btnGetConstants =  findViewById(R.id.btnGetConstants);
+        btnGetConstants.setOnClickListener(view->{getConstants();});
+
+
         mQueue = Volley.newRequestQueue(OptionsPos.this);
         toolProgressBar = new ToolProgressBar(OptionsPos.this);
         mapper = new ObjectMapper();
         _apiSettingCrud = new ApiSettingCrud();
+        _constantsPos = new ConstantsPos(OptionsPos.this);
         getApiData();
     }
 
@@ -69,6 +78,16 @@ public class OptionsPos extends AppCompatActivity {
         init();
 
     }
+
+    void getConstants()
+    {
+        try {
+            Groups.deleteAll(Groups.class);
+        }catch (Exception e) {}
+
+        _constantsPos.pullGroups();
+    }
+
 
     void getApiData()
     {

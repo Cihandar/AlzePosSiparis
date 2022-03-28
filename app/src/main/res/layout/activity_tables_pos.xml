@@ -9,6 +9,38 @@
     android:rowCount="2"
 
     >
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:contentDescription="@string/appbar_scrolling_view_behavior"
+        android:layout_marginBottom="5dp"
+        android:fillViewport="true"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rowCount="1"
+            android:id="@+id/gridGroups"
+            android:orientation="horizontal"
+            >
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="S1"
+                ></Button>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="S1"
+                ></Button>
+
+
+        </LinearLayout>
+    </HorizontalScrollView>
 
     <GridLayout
         android:layout_width="match_parent"
