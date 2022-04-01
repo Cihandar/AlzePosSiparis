@@ -1,6 +1,6 @@
 package com.example.alzepossiparis.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+//select STOKID,GRUP,ADI,SFIYAT1,SDOVIZ,BIRIM,GGRUP,HYERI from STOK WHERE TURU IN ('MAMUL','YARIMAMUL','Mamul','YarıMamul','Yarımamul')
 public class Stok {
     @JsonProperty("STOKID")
     public int sTOKID;
@@ -12,8 +12,11 @@ public class Stok {
     public double sFIYAT1;
     @JsonProperty("SDOVIZ")
     public String sDOVIZ;
-    @JsonProperty("SATISKDV")
-    public double sATISKDV;
     @JsonProperty("BIRIM")
     public String bIRIM;
+    @JsonProperty("GGRUP")
+    public String gGRUP;
+    @JsonProperty("HYERI")
+    public String hYERI;
+
 }

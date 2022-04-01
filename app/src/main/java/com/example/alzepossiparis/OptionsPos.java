@@ -81,11 +81,9 @@ public class OptionsPos extends AppCompatActivity {
 
     void getConstants()
     {
-        try {
-            Groups.deleteAll(Groups.class);
-        }catch (Exception e) {}
-
         _constantsPos.pullGroups();
+        _constantsPos.pullProductGroup();
+        _constantsPos.pullProducts();
     }
 
 
