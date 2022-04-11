@@ -16,6 +16,9 @@
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".PosListMenu"
+            android:exported="false" />
+        <activity
             android:name=".TablesPos"
             android:exported="false" />
         <activity

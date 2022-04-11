@@ -110,13 +110,20 @@ public class TablesPos extends AppCompatActivity {
     }
 
     public class ClickHandlerGroups implements View.OnClickListener {
-
         public void onClick(View v) {
             final Button btn = findViewById(v.getId());
             getTables(btn.getText().toString());
-
         }
     }
+
+    public class ClickHandlerTable implements View.OnClickListener {
+        public void onClick(View v) {
+            final Button btn = findViewById(v.getId());
+            Intent listMenu = new Intent(TablesPos.this,PosListMenu.class);
+            startActivity(listMenu);
+        }
+    }
+
 
     void getTables(String groupName)
     {
@@ -184,7 +191,6 @@ public class TablesPos extends AppCompatActivity {
             txtTablesNo = new TextView(this);
             txtTableExp = new TextView(this);
 
-
             //First Layout
             GridLayout.LayoutParams gridLytprms = new GridLayout.LayoutParams();
             gridLytprms.height = GridLayout.LayoutParams.WRAP_CONTENT;
@@ -194,6 +200,7 @@ public class TablesPos extends AppCompatActivity {
             firstLayout.setLayoutParams(gridLytprms);
             firstLayout.setPadding(_tools.setDpInt(5),_tools.setDpInt(5),_tools.setDpInt(5),_tools.setDpInt(5));
             firstLayout.setOrientation(LinearLayout.VERTICAL);
+            firstLayout.setOnClickListener(new ClickHandlerTable());
             try {
                 if(tb.gARSON_ADI!=null) firstLayout.setBackgroundResource(R.drawable.fulltable); else firstLayout.setBackgroundResource(R.drawable.empty_table);
 
