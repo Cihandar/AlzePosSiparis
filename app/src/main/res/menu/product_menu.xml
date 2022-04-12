@@ -11,8 +11,15 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/product_app_bar_groups"
-        android:icon="@drawable/options"
+        android:icon="@drawable/categories"
         android:title="Kategoriler"
         android:visible="true"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/product_app_bar_allproduct"
+        android:icon="@drawable/all"
+        android:title="Tüm Ürünler"
+        android:visible="true"
+        app:showAsAction="always" />
+
 </menu>

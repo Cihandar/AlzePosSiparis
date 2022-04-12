@@ -14,8 +14,17 @@
       <androidx.appcompat.widget.Toolbar
           android:id="@+id/product_toolbar"
           android:layout_width="match_parent"
-          android:layout_height="?attr/actionBarSize"/>
+          android:layout_height="?attr/actionBarSize"
+          />
 
     </com.google.android.material.appbar.AppBarLayout>
+
+
+    <ListView
+        android:id="@+id/lstviewProdcut"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
+        ></ListView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

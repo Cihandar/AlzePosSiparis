@@ -43,7 +43,10 @@ public class SelectCategoryFragment extends BottomSheetDialogFragment {
 
     void init()
     {
+        System.out.println("Ben Buraya Girdim KArdeş....");
         lstview = getView().findViewById(R.id.lstviewCategory);
+        GetCategory();
+
     }
 
 

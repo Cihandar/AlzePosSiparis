@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/product_linear"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    tools:ignore="UselessParent">
+
+    <ImageView
+        android:id="@+id/product_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:padding="16dp"
+        android:src="@drawable/drink"
+        tools:ignore="ContentDescription"
+
+        />
+
+
+        <TextView
+            android:id="@+id/tv_product_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Patates Kızartması"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="16dp"
+            tools:ignore="RtlHardcoded"
+            android:paddingTop="2dp"
+            android:textStyle="bold"
+            android:paddingStart="5dp"
+            android:gravity="center|left"
+            android:layout_weight="1"
+            />
+
+    <TextView
+        android:id="@+id/tv_product_price"
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:textColor="@android:color/holo_green_dark"
+        android:textSize="16dp"
+        tools:ignore="RtlHardcoded"
+        android:paddingTop="2dp"
+        android:paddingStart="5dp"
+        android:gravity="center"
+        android:text="12 ₺"
+        android:layout_weight="0"
+        />
+</LinearLayout>
