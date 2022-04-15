@@ -1,5 +1,6 @@
 package com.example.alzepossiparis;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -26,11 +28,14 @@ public class PosListMenu extends AppCompatActivity {
 
       Toolbar mToolBar;
       Button  btnCategory;
-      EditText searchText;
+      EditText searchText,txtExplanation;
       ListView lstProduct;
       ListView lstview;
       ProductViewAdapter prAdapter;
       ProductGroupsViewAdapter grAdapter;
+      TextView tvProductName,tvProductCount;
+      Button btnAddProduct,btnAddMore,btnRemoveMore,btnProductClose;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +52,8 @@ public class PosListMenu extends AppCompatActivity {
         lstProduct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println(prAdapter.getItem(position).getProductId());
+                openFragmentProduct(prAdapter.getItem(position).getProductName());
+                //System.out.println(prAdapter.getItem(position).getProductId());
             }
         });
 
@@ -101,8 +107,6 @@ public class PosListMenu extends AppCompatActivity {
 
     void GetProduct(String Query)
     {
-
-
         List<Product> product = Select.from(Product.class).where(Query).orderBy("product_name").list();
        // List<String> pr = new ArrayList<>();
         prAdapter = new ProductViewAdapter(this,product);
@@ -111,9 +115,6 @@ public class PosListMenu extends AppCompatActivity {
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,pr);*/
         lstProduct.setAdapter(prAdapter);
-
-
-
     }
 
     void openFragmentGroups()
@@ -135,14 +136,58 @@ public class PosListMenu extends AppCompatActivity {
 
     View GetCategory(View view)
     {
-         lstview = view.findViewById(R.id.lstviewCategory);
-
+        lstview = view.findViewById(R.id.lstviewCategory);
         List<ProductGroup> group = Select.from(ProductGroup.class).orderBy("product_name").list();
         grAdapter = new ProductGroupsViewAdapter(this,group);
         lstview.setAdapter(grAdapter);
-
-
         return view;
+    }
+
+
+    void openFragmentProduct(String ProductName)
+    {
+        View view = getLayoutInflater().inflate(R.layout.fragment_add_product, null);
+        Dialog dialog = new Dialog(this,R.style.DialogStyle);
+        dialog.setContentView(GetProductDialog(view));
+        tvProductName.setText(ProductName);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        int width = (int)(getResources().getDisplayMetrics().widthPixels*0.90);
+        int height = (int)(getResources().getDisplayMetrics().heightPixels*0.60);
+        dialog.getWindow().setLayout(width, height);
+
+        btnProductClose.setOnClickListener(view1 -> {dialog.dismiss();});
+        dialog.show();
+    }
+
+    View GetProductDialog(View view)
+    {
+        tvProductName = view.findViewById(R.id.tv_product_name);
+        tvProductCount = view.findViewById(R.id.tvProductCount);
+        tvProductCount.setText("1");
+        btnAddMore = view.findViewById(R.id.btnAddMore);
+        btnAddMore.setOnClickListener(view1 -> {ProductCounterTrigger(1);} );
+        btnRemoveMore = view.findViewById(R.id.btnRemoveMore);
+        btnRemoveMore.setOnClickListener(view1 -> {ProductCounterTrigger(-1);} );
+        txtExplanation = view.findViewById(R.id.txtExplanation);
+        btnProductClose = view.findViewById(R.id.btnProductCancel);
+        return view;
+    }
+
+    void ProductCounterTrigger(int number)
+    {
+        int count = tryParseInt(tvProductCount.getText().toString(),0);
+        count = count + (number);
+        if(count<2) count=1;
+        tvProductCount.setText(String.valueOf(count));
+    }
+
+    public int tryParseInt(String value, int defaultVal) {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return defaultVal;
+        }
     }
 
 

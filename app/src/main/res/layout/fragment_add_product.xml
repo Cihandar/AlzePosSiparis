@@ -5,7 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".fragments.AddProductFragment"
     android:background="#F0F0F0"
+    android:paddingBottom="30dp"
+    android:paddingTop="30dp"
+    android:paddingEnd="30dp"
+    android:paddingStart="30dp"
     >
+
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,25 +18,35 @@
     >
     <GridLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
         android:columnCount="3"
-        android:rowCount="2"
+        android:rowCount="3"
         >
+        <TextView
+            android:id="@+id/tv_product_name"
+            android:layout_height="50dp"
+            android:layout_width="match_parent"
+            android:layout_columnSpan="3"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:text="Ürün Adı"
+            />
+
 
         <Button
-            android:id="@+id/btnAddMore"
-            android:layout_width="wrap_content"
+            android:id="@+id/btnRemoveMore"
+            android:layout_width="30dp"
             android:layout_height="match_parent"
             android:layout_columnWeight="1"
-            android:foreground="@android:drawable/ic_input_add"
-            android:foregroundGravity="center"
-            android:background="@drawable/round_back_primary_15"
-            android:text="+"
-            android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="5dp"
-            ></Button>
+            android:background="@drawable/searchbutton2"
+            android:foreground="@drawable/minus"
+            android:foregroundGravity="center"
+            android:text="-"></Button>
 
         <TextView
             android:id="@+id/tvProductCount"
@@ -51,19 +66,19 @@
             ></TextView>
 
         <Button
-            android:id="@+id/btnRemoveMore"
-            android:layout_width="wrap_content"
+            android:id="@+id/btnAddMore"
+            android:layout_width="30dp"
             android:layout_height="match_parent"
             android:layout_columnWeight="1"
-            android:foreground="@drawable/remove_icon"
-            android:foregroundGravity="center"
-            android:text="-"
-            android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:background="@drawable/round_back_secondary_15"
             android:layout_marginBottom="5dp"
-            ></Button>
+            android:background="@drawable/searchbutton"
+            android:foreground="@drawable/plus"
+            android:foregroundGravity="center"
+            android:text="+"></Button>
+
 
     </GridLayout>
     <LinearLayout
@@ -72,6 +87,7 @@
         android:orientation="vertical"
         >
         <EditText
+            android:id="@+id/txtExplanation"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:hint="Açıklama Yazın"
@@ -91,6 +107,23 @@
             android:textAllCaps="false"
             android:textSize="20dp"
             android:background="@drawable/round_back_primary_15"
+            android:textColor="#fff"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            ></Button>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/btnProductCancel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Vazgeç"
+            android:textAllCaps="false"
+            android:textSize="20dp"
+            android:background="@drawable/round_back_primary_cancel"
             android:textColor="#fff"
             android:layout_marginTop="20dp"
             android:layout_marginStart="20dp"
