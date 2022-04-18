@@ -21,5 +21,12 @@
         android:title="Tüm Ürünler"
         android:visible="true"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/product_cart"
+        android:icon="@drawable/cart2"
+        android:actionLayout="@layout/actionbar_badge_layout"
+        android:title="Tüm Ürünler"
+        android:visible="true"
+        app:showAsAction="always" />
 
 </menu>

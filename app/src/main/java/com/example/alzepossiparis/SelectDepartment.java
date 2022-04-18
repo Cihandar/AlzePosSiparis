@@ -24,6 +24,7 @@ import com.example.alzepossiparis.models.Garson;
 import com.example.alzepossiparis.models.RequestModel;
 import com.example.alzepossiparis.models.VolleyCallback;
 import com.example.alzepossiparis.tools.CreateRequestModel;
+import com.example.alzepossiparis.tools.SpTools;
 import com.example.alzepossiparis.tools.ToolProgressBar;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,7 +41,7 @@ public class SelectDepartment extends AppCompatActivity {
     ObjectMapper mapper;
     ProgressDialog progressDialog;
     CreateRequestModel _createRequestModel;
-
+    SpTools spTools;
     void init()
     {
         gridDepartment = findViewById(R.id.gridDepartment);
@@ -51,7 +52,7 @@ public class SelectDepartment extends AppCompatActivity {
         _tools =new ToolProgressBar(SelectDepartment.this);
         _createRequestModel = new CreateRequestModel();
         gridDepartment.removeAllViews();
-
+        spTools = new SpTools(this);
         getDepartment();
     }
 
@@ -175,8 +176,10 @@ public class SelectDepartment extends AppCompatActivity {
             final CardView cardView = findViewById(v.getId());
             Intent tables = new Intent(SelectDepartment.this,TablesPos.class);
             tables.putExtra("DeptCode",cardView.getTransitionName());
+            spTools.PutData("Departman",cardView.getTransitionName());
             startActivity(tables);
             _tools.showToast("Seçili Departman Kodu : "+cardView.getTransitionName());
+
         }
     }
 }

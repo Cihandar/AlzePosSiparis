@@ -5,7 +5,9 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
@@ -21,6 +23,7 @@ import com.example.alzepossiparis.models.RequestModel;
 import com.example.alzepossiparis.models.VolleyCallback;
 import com.example.alzepossiparis.sqliteModels.ApiSetting;
 import com.example.alzepossiparis.tools.CreateRequestModel;
+import com.example.alzepossiparis.tools.SpTools;
 import com.example.alzepossiparis.tools.ToolProgressBar;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,7 +43,8 @@ public class Login extends AppCompatActivity {
     RequestQueue mQueue;
     ObjectMapper mapper;
     ProgressDialog progressDialog;
-
+    SharedPreferences spStored;
+    SpTools spTools;
     void init ()
     {
         txtWaiterPassword = findViewById(R.id.txtWaiterPassword);
@@ -54,7 +58,7 @@ public class Login extends AppCompatActivity {
         mapper = new ObjectMapper();
         _tools =new ToolProgressBar(Login.this);
         _createRequestModel = new CreateRequestModel();
-
+        spTools = new SpTools(this);
     }
 
     @Override
@@ -90,6 +94,11 @@ public class Login extends AppCompatActivity {
                             progressDialog.dismiss();
                             if(garson.size()>0)
                             {
+
+                                spTools.PutData("Sifre",txtWaiterPassword.getText().toString());
+                                spTools.PutData("GKodu",garson.get(0).gKodu);
+                                spTools.PutData("GAdi",garson.get(0).gAdi);
+
                                 _tools.showToast("Hoşgeldin, "+garson.get(0).gAdi);
                                 Intent selectdpt = new Intent(Login.this,SelectDepartment.class);
                                 startActivity(selectdpt);

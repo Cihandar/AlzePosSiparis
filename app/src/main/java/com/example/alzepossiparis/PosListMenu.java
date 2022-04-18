@@ -3,25 +3,35 @@ package com.example.alzepossiparis;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
 
 import com.example.alzepossiparis.adapters.ProductGroupsViewAdapter;
+import com.example.alzepossiparis.adapters.ProductSendViewAdapter;
 import com.example.alzepossiparis.adapters.ProductViewAdapter;
+import com.example.alzepossiparis.models.Adisyon;
+import com.example.alzepossiparis.models.AdsSatir;
 import com.example.alzepossiparis.sqliteModels.Product;
 import com.example.alzepossiparis.sqliteModels.ProductGroup;
+import com.example.alzepossiparis.tools.SpTools;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.orm.query.Select;
 
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class PosListMenu extends AppCompatActivity {
@@ -35,7 +45,12 @@ public class PosListMenu extends AppCompatActivity {
       ProductGroupsViewAdapter grAdapter;
       TextView tvProductName,tvProductCount;
       Button btnAddProduct,btnAddMore,btnRemoveMore,btnProductClose;
-
+      TextView tvCart;
+      SpTools spTools;
+      List<AdsSatir> lstAdsSatir;
+      Adisyon adisyon;
+    Button btnSendProduct ;
+    Button btnSendCancel ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,14 +67,14 @@ public class PosListMenu extends AppCompatActivity {
         lstProduct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                openFragmentProduct(prAdapter.getItem(position).getProductName());
+                openFragmentProduct(prAdapter.getItem(position));
                 //System.out.println(prAdapter.getItem(position).getProductId());
             }
         });
 
-
-
-
+        spTools = new SpTools(this);
+        lstAdsSatir = new ArrayList<>();
+        adisyon = new Adisyon();
     }
 
     @Override
@@ -69,9 +84,7 @@ public class PosListMenu extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.product_menu,menu);
 
         MenuItem searchItem =  menu.findItem(R.id.product_app_bar_search);
-
         SearchView searchText = (SearchView) searchItem.getActionView();
-
         searchText.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -86,8 +99,22 @@ public class PosListMenu extends AppCompatActivity {
             }
         });
 
+       // getMenuInflater().inflate(R.menu.product_menu,menu);
+        MenuItem CartItem = menu.findItem(R.id.product_cart);
+        MenuItemCompat.setActionView(CartItem,R.layout.actionbar_badge_layout);
+        RelativeLayout notifCount = (RelativeLayout)   MenuItemCompat.getActionView(CartItem);
+
+        tvCart = (TextView) notifCount.findViewById(R.id.tv_cart_notification);
+        tvCart.setText("0");
+
+        ImageView image = notifCount.findViewById(R.id.burayatikla);
+
+        image.setOnClickListener(view -> {OpenCart();});
+
         return true;
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -98,6 +125,9 @@ public class PosListMenu extends AppCompatActivity {
                 return true;
             case R.id.product_app_bar_allproduct:
                 GetProduct("1=1");
+                return true;
+            case R.id.product_cart:
+                OpenCart();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -144,12 +174,12 @@ public class PosListMenu extends AppCompatActivity {
     }
 
 
-    void openFragmentProduct(String ProductName)
+    void openFragmentProduct(Product product)
     {
         View view = getLayoutInflater().inflate(R.layout.fragment_add_product, null);
         Dialog dialog = new Dialog(this,R.style.DialogStyle);
-        dialog.setContentView(GetProductDialog(view));
-        tvProductName.setText(ProductName);
+        dialog.setContentView(GetProductDialog(view,product));
+        tvProductName.setText(product.getProductName());
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         int width = (int)(getResources().getDisplayMetrics().widthPixels*0.90);
@@ -157,10 +187,12 @@ public class PosListMenu extends AppCompatActivity {
         dialog.getWindow().setLayout(width, height);
 
         btnProductClose.setOnClickListener(view1 -> {dialog.dismiss();});
+        btnAddProduct.setOnClickListener(view1-> {ProductAddCart(product); dialog.dismiss(); });
+
         dialog.show();
     }
 
-    View GetProductDialog(View view)
+    View GetProductDialog(View view,Product product)
     {
         tvProductName = view.findViewById(R.id.tv_product_name);
         tvProductCount = view.findViewById(R.id.tvProductCount);
@@ -171,7 +203,22 @@ public class PosListMenu extends AppCompatActivity {
         btnRemoveMore.setOnClickListener(view1 -> {ProductCounterTrigger(-1);} );
         txtExplanation = view.findViewById(R.id.txtExplanation);
         btnProductClose = view.findViewById(R.id.btnProductCancel);
+        btnAddProduct = view.findViewById(R.id.addProduct);
+
         return view;
+    }
+
+    void ProductAddCart(Product product)
+    {
+       AdsSatir item = new AdsSatir();
+       item.Aciklama = txtExplanation.getText().toString();
+       item.Adet = tryParseInt(tvProductCount.getText().toString(),1);
+       item.StokId = product.getProductId();
+       item.BirimFiyat = product.getProductPrice();
+       item.StokAdi = product.getProductName();
+       lstAdsSatir.add(item);
+       tvCart.setText(String.valueOf(lstAdsSatir.size()));
+
     }
 
     void ProductCounterTrigger(int number)
@@ -182,6 +229,34 @@ public class PosListMenu extends AppCompatActivity {
         tvProductCount.setText(String.valueOf(count));
     }
 
+    void OpenCart()
+    {
+        View view = getLayoutInflater().inflate(R.layout.fragment_send_products, null);
+        Dialog dialog = new Dialog(this,R.style.DialogStyle);
+        dialog.setContentView(GetOpenCartDialog(view));
+
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        int width = (int)(getResources().getDisplayMetrics().widthPixels);
+        int height = (int)(getResources().getDisplayMetrics().heightPixels);
+        dialog.getWindow().setLayout(width, height);
+        btnSendCancel.setOnClickListener(view1->{dialog.dismiss();});
+
+        dialog.show();
+    }
+
+    View GetOpenCartDialog(View view)
+    {
+        TextView tvTitleAndTotal = view.findViewById(R.id.tv_send_title);
+        tvTitleAndTotal.setText("Sipariş Sepeti");
+        ListView lstsended = view.findViewById(R.id.lv_send_listview);
+        ProductSendViewAdapter snAdapter = new ProductSendViewAdapter(this,lstAdsSatir);
+        lstsended.setAdapter(snAdapter);
+          btnSendProduct = view.findViewById(R.id.btn_send_product);
+          btnSendCancel = view.findViewById(R.id.btn_send_cancel);
+        return view;
+    }
+
     public int tryParseInt(String value, int defaultVal) {
         try {
             return Integer.parseInt(value);
@@ -189,6 +264,9 @@ public class PosListMenu extends AppCompatActivity {
             return defaultVal;
         }
     }
+
+
+
 
 
 
